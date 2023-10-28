@@ -5,7 +5,7 @@ import { AuthContext } from "../../Providers/AuthProvider";
 const CheckOut = () => {
   const services = useLoaderData();
   const {user} = useContext(AuthContext)
-  const { title, _id, price } = services;
+  const { title, _id, price,img } = services;
   const handleCheckout = e =>{
     e.preventDefault()
     console.log("confirmed")
@@ -14,14 +14,28 @@ const CheckOut = () => {
     const name = form.name.value
     const date = form.date.value
     const email = user?.email
-    const order = {
+    const checkOut = {
         customerName: name,
+        img,
         email,
         date,
-        service: _id,
+        service: title,
+        service_id: _id,
         price: price
     }
-    console.log(order)
+    console.log(checkOut)
+    fetch('http://localhost:5000/checkouts',{
+        method: 'POST',
+        headers:{
+           'content-type': 'application/json'
+        },
+        body: JSON.stringify(checkOut)
+    })
+    .then(res => res.json())
+    .then(data=>{
+        console.log(data)
+    })
+
   }
   return (
     <div >
